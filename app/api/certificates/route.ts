@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
   const origin = request.headers.get("origin") || "";
   const secFetchSite = request.headers.get("sec-fetch-site") || "";
 
+  
   // List of allowed frontend host domains (local dev + production Vercel domains)
   let allowedDomains: string[] = [];
   const envDomains = process.env.NEXT_CERTIFICATION_ALLOWED_DOMAINS || "";
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
     return new NextResponse(result.stream, {
       headers: {
         "Cache-Control": "private, no-cache",
-        "Content-Type": result.blob.contentType,
+        "Content-Type": result.blob.contentType || "image/jpeg",
         "X-Content-Type-Options": "nosniff",
       },
     });
