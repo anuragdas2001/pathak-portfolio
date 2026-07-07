@@ -90,7 +90,7 @@ export function Experience() {
         <p className="text-center text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-xl mx-auto mb-6">
           Drag horizontally or scroll with your mouse wheel to rotate through my verified institutional credentials.
         </p>
-        <div style={{ height: '600px', position: 'relative' }} className="w-full">
+        <div style={{ height: '750px', position: 'relative' }} className="w-full">
           <CircularGallery
             items={PORTFOLIO_DATA.certifications}
             bend={3}
