@@ -2,14 +2,20 @@
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Briefcase, CheckCircle2, Users, ShieldCheck, Zap, Sparkles } from "lucide-react";
+import { Briefcase, CheckCircle2, Users, ShieldCheck, Zap, Sparkles, ExternalLink } from "lucide-react";
 
 export interface CurvedTimelineEntry {
   year: string;
   role: string;
   company: string;
+  companyUrl?: string;
   description: string;
   highlights: string[];
+  products?: {
+    name: string;
+    url?: string;
+    description?: string;
+  }[];
 }
 
 interface CurvedThreadTimelineProps {
@@ -29,7 +35,7 @@ export const CurvedThreadTimeline: React.FC<CurvedThreadTimelineProps> = ({ data
   const opacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 font-sans">
+    <div ref={containerRef} className="relative w-full max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-6 font-sans">
       {/* 
         DESKTOP WINDING S-CURVE THREAD (md and up)
         Spans down the center (x = 50%) weaving through milestone nodes
@@ -150,10 +156,10 @@ export const CurvedThreadTimeline: React.FC<CurvedThreadTimelineProps> = ({ data
                 Alternates left and right on desktop; stacks on right on mobile
               */}
               <div
-                className={`w-full pl-16 md:pl-0 md:w-[46%] ${
+                className={`w-full pl-14 sm:pl-16 md:pl-0 md:w-[49%] ${
                   isEven
-                    ? "md:mr-auto md:pr-12 md:text-right"
-                    : "md:ml-auto md:pl-12 md:text-left"
+                    ? "md:mr-auto md:pr-8 md:text-right"
+                    : "md:ml-auto md:pl-8 md:text-left"
                 }`}
               >
                 {/* Year Badge (Mobile & Desktop) */}
@@ -179,7 +185,13 @@ export const CurvedThreadTimeline: React.FC<CurvedThreadTimelineProps> = ({ data
                         {item.role}
                       </h3>
                       <span className="text-sm font-mono text-zinc-600 dark:text-zinc-400 font-semibold mt-1 inline-block">
-                        @ {item.company}
+                        @ {item.companyUrl ? (
+                          <a href={item.companyUrl} target="_blank" rel="noopener noreferrer" className="hover:text-black dark:hover:text-white hover:underline decoration-1 underline-offset-4 transition-colors">
+                            {item.company} ↗
+                          </a>
+                        ) : (
+                          item.company
+                        )}
                       </span>
                     </div>
 
@@ -228,6 +240,54 @@ export const CurvedThreadTimeline: React.FC<CurvedThreadTimelineProps> = ({ data
                       ))}
                     </div>
                   </div>
+
+                  {/* Products / Systems Built */}
+                  {item.products && item.products.length > 0 && (
+                    <div className="space-y-3.5 pt-4 mt-6 border-t border-black/10 dark:border-white/10">
+                      <span
+                        className={`text-[11px] font-mono uppercase tracking-widest text-zinc-500 font-semibold block ${
+                          isEven ? "md:text-right" : "text-left"
+                        }`}
+                      >
+                        // Key Systems & Products Built
+                      </span>
+                      <div className="grid grid-cols-1 gap-2.5">
+                        {item.products.map((prod, pIdx) => (
+                          <a
+                            key={pIdx}
+                            href={prod.url || "#"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`group/prod flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/10 dark:border-white/10 hover:border-black dark:hover:border-white hover:bg-black/[0.06] dark:hover:bg-white/[0.08] transition-all duration-200 shadow-sm ${
+                              isEven ? "md:flex-row-reverse" : ""
+                            }`}
+                          >
+                            <div className={`flex items-center gap-3 ${isEven ? "md:flex-row-reverse" : ""}`}>
+                              <div className="h-8 w-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-mono font-bold text-xs shrink-0 shadow-md group-hover/prod:scale-105 transition-transform">
+                                {prod.name.charAt(0)}
+                              </div>
+                              <div className={isEven ? "md:text-right" : "text-left"}>
+                                <div className={`flex items-center gap-1.5 font-bold text-xs sm:text-sm text-black dark:text-white group-hover/prod:underline decoration-1 underline-offset-4 ${isEven ? "md:flex-row-reverse" : ""}`}>
+                                  <span>{prod.name}</span>
+                                  {prod.url && <ExternalLink className="h-3.5 w-3.5 text-zinc-400 group-hover/prod:text-black dark:group-hover/prod:text-white shrink-0 transition-colors" />}
+                                </div>
+                                {prod.description && (
+                                  <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5 line-clamp-1 font-normal">
+                                    {prod.description}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            {prod.url && (
+                              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300 bg-black/5 dark:bg-white/10 px-2.5 py-1 rounded-full border border-black/10 dark:border-white/10 shrink-0 self-start sm:self-center group-hover/prod:border-black/30 dark:group-hover/prod:border-white/30 group-hover/prod:bg-black group-hover/prod:text-white dark:group-hover/prod:bg-white dark:group-hover/prod:text-black transition-all">
+                                View Live ↗
+                              </span>
+                            )}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>

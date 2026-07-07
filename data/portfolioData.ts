@@ -11,12 +11,20 @@ export interface Project {
   accentColor: string;
 }
 
+export interface ExperienceProduct {
+  name: string;
+  url?: string;
+  description?: string;
+}
+
 export interface ExperienceItem {
   year: string;
   role: string;
   company: string;
+  companyUrl?: string;
   description: string;
   highlights: string[];
+  products?: ExperienceProduct[];
 }
 
 export interface TechItem {
@@ -37,6 +45,7 @@ export interface Achievement {
   platform: string;
   badge: string;
   rank: string;
+  topPercentage?: string;
   details: string;
 }
 
@@ -101,7 +110,7 @@ export const PORTFOLIO_DATA = {
     },
     {
       id: "project-3",
-      title: "QuidAI — AI Recruiting Engine",
+      title: "Coming Soon",
       subtitle: "AI-driven talent acquisition and shortlisting tool",
       description: "Engineered an AI-driven recruiting tool that automates candidate screening and resume evaluation, successfully reducing recruiter shortlisting time by 35% across hiring teams.",
       tags: ["Next.js", "TypeScript", "Redux Toolkit", "AI/ML Integration", "Docker"],
@@ -111,41 +120,41 @@ export const PORTFOLIO_DATA = {
       imageBg: "from-zinc-900/40 via-zinc-950/20 to-black",
       accentColor: "#ffffff"
     },
-    {
-      id: "project-4",
-      title: "Vryno Bookings & HRMS",
-      subtitle: "Enterprise scheduling & human resource management suite",
-      description: "Developed automated booking workflows with Google, Microsoft, and Zoom calendar integrations, cutting manual scheduling by 60%. Engineered Vryno HRMS frontend optimizations, boosting HR efficiency by 45% and reducing page load times by 30%.",
-      tags: ["Next.js", "TypeScript", "Redux Toolkit", "OAuth & Calendars", "Docker"],
-      metrics: "60% Less Scheduling • 45% HR Boost",
-      liveUrl: "https://github.com/anurag-das",
-      githubUrl: "https://github.com/anurag-das",
-      imageBg: "from-zinc-900/40 via-zinc-950/20 to-black",
-      accentColor: "#ffffff"
-    }
+   
   ] as Project[],
 
   techStack: [
     { name: "TypeScript", category: "Core", proficiency: "Expert" },
-    { name: "JavaScript (ES6+)", category: "Core", proficiency: "Expert" },
+    { name: "JavaScript", category: "Core", proficiency: "Expert" },
     { name: "Python", category: "Core", proficiency: "Advanced" },
     { name: "React.js", category: "Core", proficiency: "Expert" },
     { name: "Next.js", category: "Core", proficiency: "Expert" },
     { name: "Redux Toolkit", category: "Core", proficiency: "Expert" },
+    { name: "Tailwind CSS", category: "Design & UI", proficiency: "Expert" },
+    { name: "ShadCN UI", category: "Design & UI", proficiency: "Expert" },
+    { name: "Material UI", category: "Design & UI", proficiency: "Expert" },
+    { name: "Git", category: "Design & UI", proficiency: "Expert" },
+    { name: "GitHub", category: "Design & UI", proficiency: "Expert" },
+    { name: "Postman", category: "Design & UI", proficiency: "Expert" },
+    { name: "Swagger", category: "Design & UI", proficiency: "Expert" },
     { name: "Node.js", category: "Backend & DevOps", proficiency: "Expert" },
-    { name: "Express.js & NestJS", category: "Backend & DevOps", proficiency: "Advanced" },
-    { name: "REST APIs & Django", category: "Backend & DevOps", proficiency: "Advanced" },
-    { name: "Docker & Linux", category: "Backend & DevOps", proficiency: "Intermediate" },
-    { name: "AWS & Cloudflare", category: "Backend & DevOps", proficiency: "Advanced" },
-    { name: "Vercel & Netlify", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "Express.js", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "NestJS", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "REST APIs", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "GraphQL", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "Django", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "Docker", category: "Backend & DevOps", proficiency: "Intermediate" },
+    { name: "Linux", category: "Backend & DevOps", proficiency: "Intermediate" },
+    { name: "AWS", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "Cloudflare", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "Vercel", category: "Backend & DevOps", proficiency: "Advanced" },
+    { name: "Netlify", category: "Backend & DevOps", proficiency: "Advanced" },
     { name: "PostgreSQL", category: "Databases & ORMs", proficiency: "Expert" },
     { name: "MongoDB", category: "Databases & ORMs", proficiency: "Expert" },
     { name: "Prisma ORM", category: "Databases & ORMs", proficiency: "Advanced" },
     { name: "Mongoose", category: "Databases & ORMs", proficiency: "Advanced" },
-    { name: "Tailwind CSS", category: "Design & UI", proficiency: "Expert" },
-    { name: "ShadCN UI & MUI", category: "Design & UI", proficiency: "Expert" },
-    { name: "Git & GitHub", category: "Design & UI", proficiency: "Expert" },
-    { name: "Postman & API Tools", category: "Design & UI", proficiency: "Expert" }
+    { name: "Firebase", category: "Databases & ORMs", proficiency: "Advanced" },
+    { name: "Supabase", category: "Databases & ORMs", proficiency: "Advanced" }
   ] as TechItem[],
 
   experience: [
@@ -153,44 +162,96 @@ export const PORTFOLIO_DATA = {
       year: "June 2026 — Present",
       role: "Full Stack & AI Application Engineer",
       company: "CrystalStone Properties LLP",
+      companyUrl: "https://crystalstone.in",
       description: "Developing an AI-enabled SaaS platform for real estate collaboration, investor onboarding, campaign management, contracts, and buyer workflows.",
       highlights: [
         "Designing scalable full-stack architecture using modern JavaScript frameworks (Next.js, NestJS) and API-driven development.",
         "Building automation features and AI workflows that streamline operational and sales processes.",
         "Architecting real-time investor telemetry and campaign monitoring across remote distributed environments."
+      ],
+      products: [
+        {
+          name: "CrystalStone AI Platform",
+          url: "https://crystalstone.in",
+          description: "AI-enabled real estate collaboration & investor onboarding SaaS"
+        },
+        {
+          name: "Investor Telemetry Portal",
+          url: "https://crystalstone.in",
+          description: "Real-time campaign monitoring & analytics dashboard"
+        }
       ]
     },
     {
       year: "Feb 2026 — May 2026",
       role: "Software Development Engineer (Full Stack)",
       company: "Enoylity Media Creations LLC",
+      companyUrl: "https://www.enoylitystudio.com/",
       description: "Built a SaaS platform streamlining brand–creator collaborations through campaign management, onboarding, contracts, media kits, and dispute resolution workflows.",
       highlights: [
         "Engineered scalable frontend systems and API integrations using Next.js, TypeScript, Node.js, and MongoDB.",
         "Built an internal KPI tracking tool to monitor productivity across creative teams, including script writers, videographers, and editors.",
         "Revamped the parent company's landing page, improving performance, responsiveness, and lead-generation effectiveness."
+      ],
+      products: [
+        {
+          name: "Collabglam",
+          url: "https://collabglam.com/",
+          description: "Brand–creator collaboration & media management SaaS"
+        },
+        {
+          name: "Studio KPI Tracker",
+          url: "https://kdppl.enoylitystudio.com",
+          description: "Internal analytics & creative team productivity dashboard"
+        }
       ]
     },
     {
       year: "Nov 2024 — Oct 2025",
       role: "Frontend Developer (Intern → Junior Developer)",
       company: "Shubpy Solutions Pvt. Ltd",
+      companyUrl: "https://shubpy.com",
       description: "Developed high-impact AI recruiting tools and automated enterprise scheduling workflows for B2B SaaS platforms.",
       highlights: [
         "Built QuidAI, an AI-driven recruiting tool that reduced recruiter shortlisting time by 35% across B2B hiring pipelines.",
         "Developed Vryno Bookings with Google, Microsoft, and Zoom calendar integrations, reducing manual scheduling by 60%.",
         "Engineered Vryno HRMS and optimized frontend performance, improving HR efficiency by 45% and reducing page load times by 30%."
+      ],
+      products: [
+        {
+          name: "QuidAI Recruiting Engine",
+          url: "https://shubpy.com",
+          description: "AI-driven candidate screening & resume evaluation tool"
+        },
+        {
+          name: "Vryno Bookings Suite",
+          url: "https://vryno.com",
+          description: "Enterprise multi-calendar scheduling & booking automation"
+        },
+        {
+          name: "Vryno HRMS Platform",
+          url: "https://vryno.com",
+          description: "High-performance enterprise HR & employee management system"
+        }
       ]
     },
     {
       year: "May 2024 — Oct 2024",
       role: "Teaching Assistant (React & JavaScript)",
       company: "Coding Ninjas",
+      companyUrl: "https://codingninjas.com",
       description: "Mentored aspiring software engineers and enforced institutional code quality across React and modern JavaScript curriculums.",
       highlights: [
         "Mentored 250+ students and resolved 500+ technical doubts on React, Redux Toolkit, Vite, and JavaScript fundamentals.",
         "Reviewed 100+ student capstone projects, improving architectural code quality and best-practice adherence.",
         "Maintained a stellar 4.9/5 performance rating, ranking among the top-performing TAs nationwide."
+      ],
+      products: [
+        {
+          name: "Coding Ninjas LMS Portal",
+          url: "https://codingninjas.com",
+          description: "Interactive learning platform & code review environment"
+        }
       ]
     }
   ] as ExperienceItem[],
@@ -228,64 +289,124 @@ export const PORTFOLIO_DATA = {
 
   certifications: [
     {
-      title: "Full-Stack Web Development with React",
+      title: "01",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~Y9YDNVJALKGG/CERTIFICATE_LANDING_PAGE~Y9YDNVJALKGG.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~Y9YDNVJALKGG/CERTIFICATE_LANDING_PAGE~Y9YDNVJALKGG.jpeg"
     },
     {
-      title: "Advanced Cloud Architecture & AWS",
+      title: "02",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://anuragdas-portfolio.vercel.app/certificates/Coursera%20VHZR6DKZ6UZP_page-0001.jpg",
+      url: "https://anuragdas-portfolio.vercel.app/certificates/Coursera%20VHZR6DKZ6UZP_page-0001.jpg"
     },
     {
-      title: "Machine Learning & AI Workflows",
+      title: "03",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~SB8GD6RAUJPK/CERTIFICATE_LANDING_PAGE~SB8GD6RAUJPK.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~SB8GD6RAUJPK/CERTIFICATE_LANDING_PAGE~SB8GD6RAUJPK.jpeg"
     },
     {
-      title: "Distributed Systems & Microservices",
+      title: "04",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~SF5TQZ6NWV34/CERTIFICATE_LANDING_PAGE~SF5TQZ6NWV34.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~SF5TQZ6NWV34/CERTIFICATE_LANDING_PAGE~SF5TQZ6NWV34.jpeg"
     },
     {
-      title: "TypeScript & Next.js Enterprise Mastery",
+      title: "05",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~J4T8QDNU8VUQ/CERTIFICATE_LANDING_PAGE~J4T8QDNU8VUQ.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~J4T8QDNU8VUQ/CERTIFICATE_LANDING_PAGE~J4T8QDNU8VUQ.jpeg"
     },
     {
-      title: "PostgreSQL & Database Optimization",
+      title: "06",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~KJTUALC9HLAA/CERTIFICATE_LANDING_PAGE~KJTUALC9HLAA.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~KJTUALC9HLAA/CERTIFICATE_LANDING_PAGE~KJTUALC9HLAA.jpeg"
     },
     {
-      title: "UI/UX Design Systems & Engineering",
+      title: "07",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~JGX6RC3AZX5L/CERTIFICATE_LANDING_PAGE~JGX6RC3AZX5L.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~JGX6RC3AZX5L/CERTIFICATE_LANDING_PAGE~JGX6RC3AZX5L.jpeg"
     },
     {
-      title: "Docker, Kubernetes & DevOps Pipelines",
+      title: "08",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~DHYYKCVHDHXW/CERTIFICATE_LANDING_PAGE~DHYYKCVHDHXW.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~DHYYKCVHDHXW/CERTIFICATE_LANDING_PAGE~DHYYKCVHDHXW.jpeg"
     },
     {
-      title: "GraphQL & High-Performance APIs",
+      title: "09",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~PJE9TAWQ94HX/CERTIFICATE_LANDING_PAGE~PJE9TAWQ94HX.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~PJE9TAWQ94HX/CERTIFICATE_LANDING_PAGE~PJE9TAWQ94HX.jpeg"
     },
     {
-      title: "Cybersecurity & OAuth Authentication",
+      title: "10",
       issuer: "Coursera",
-      image: "/certifications/coursera.jpeg",
-      url: "#"
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~RGEJDZ3LNUYW/CERTIFICATE_LANDING_PAGE~RGEJDZ3LNUYW.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~RGEJDZ3LNUYW/CERTIFICATE_LANDING_PAGE~RGEJDZ3LNUYW.jpeg"
+    },
+    {
+      title: "11",
+      issuer: "Coursera",
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~DE5EMMTH829A/CERTIFICATE_LANDING_PAGE~DE5EMMTH829A.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~DE5EMMTH829A/CERTIFICATE_LANDING_PAGE~DE5EMMTH829A.jpeg"
+    },
+    {
+      title: "12",
+      issuer: "Coursera",
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~FBJAELDLRR4E/CERTIFICATE_LANDING_PAGE~FBJAELDLRR4E.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~FBJAELDLRR4E/CERTIFICATE_LANDING_PAGE~FBJAELDLRR4E.jpeg"
+    },
+    {
+      title: "13",
+      issuer: "Coursera",
+      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~6H3MVA5ZA9DR/CERTIFICATE_LANDING_PAGE~6H3MVA5ZA9DR.jpeg",
+      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~6H3MVA5ZA9DR/CERTIFICATE_LANDING_PAGE~6H3MVA5ZA9DR.jpeg"
+    },
+    {
+      title: "14",
+      issuer: "Professional Certification",
+      image: "https://anuragdas-portfolio.vercel.app/certificates/Frontend_page-0001.jpg",
+      url: "https://anuragdas-portfolio.vercel.app/certificates/Frontend_page-0001.jpg"
+    },
+    {
+      title: "15",
+      issuer: "Professional Certification",
+      image: "https://anuragdas-portfolio.vercel.app/certificates/Backend_page-0001.jpg",
+      url: "https://anuragdas-portfolio.vercel.app/certificates/Backend_page-0001.jpg"
+    },
+    {
+      title: "16",
+      issuer: "Professional Certification",
+      image: "https://anuragdas-portfolio.vercel.app/certificates/certificate177307189ef448573c36cc9a17780c744db851b_page-0001.jpg",
+      url: "https://anuragdas-portfolio.vercel.app/certificates/certificate177307189ef448573c36cc9a17780c744db851b_page-0001.jpg"
+    },
+    {
+      title: "17",
+      issuer: "Professional Certification",
+      image: "https://anuragdas-portfolio.vercel.app/certificates/certificate1773072221c57f7625f24f4847367e55d9c9119_page-0001.jpg",
+      url: "https://anuragdas-portfolio.vercel.app/certificates/certificate1773072221c57f7625f24f4847367e55d9c9119_page-0001.jpg"
+    },
+    {
+      title: "18",
+      issuer: "Professional Certification",
+      image: "https://anuragdas-portfolio.vercel.app/certificates/certificate177307352b7ec1f2d066bc29385d38b3c54f7e4_page-0001.jpg",
+      url: "https://anuragdas-portfolio.vercel.app/certificates/certificate177307352b7ec1f2d066bc29385d38b3c54f7e4_page-0001.jpg"
+    },
+    {
+      title: "19",
+      issuer: "Professional Certification",
+      image: "https://anuragdas-portfolio.vercel.app/certificates/certificate28681851d8be6c7f7eb5277a8f4cdb3ae1e95b5_page-0001.jpg",
+      url: "https://anuragdas-portfolio.vercel.app/certificates/certificate28681851d8be6c7f7eb5277a8f4cdb3ae1e95b5_page-0001.jpg"
+    },
+    {
+      title: "20",
+      issuer: "Professional Certification",
+      image: "https://anuragdas-portfolio.vercel.app/certificates/FE-cert_page-0001.jpg",
+      url: "https://anuragdas-portfolio.vercel.app/certificates/FE-cert_page-0001.jpg"
     }
   ] as Certification[],
 
@@ -300,25 +421,29 @@ export const PORTFOLIO_DATA = {
     {
       platform: "Codeforces",
       badge: "Pupil • 1283",
-      rank: "🏆 Global Rank 1558",
+      rank: "Global Rank 1558",
+      topPercentage: "Top 9%",
       details: "Codeforces Round #863 (17K+ participants)"
     },
     {
       platform: "CodeChef",
       badge: "2⭐ Rating",
-      rank: "🏆 Global Rank 115",
+      rank: "Global Rank 115",
+      topPercentage: "Top 0.6%",
       details: "CodeChef Starter 83 (17K+ participants)"
     },
     {
       platform: "CodeChef",
       badge: "2⭐ Rating",
-      rank: "🏆 Global Rank 217",
+      rank: "Global Rank 217",
+      topPercentage: "Top 1.5%",
       details: "CodeChef Starter 84 (14K+ participants)"
     },
     {
       platform: "LeetCode",
       badge: "Top 22%",
-      rank: "🏆 Global Rank 800",
+      rank: "Global Rank 800",
+      topPercentage: "Top 3.3%",
       details: "Weekly Contest 306 (24K+ participants)"
     }
   ] as Achievement[]

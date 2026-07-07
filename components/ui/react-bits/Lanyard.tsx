@@ -5,6 +5,7 @@ import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
+import { useTheme } from 'next-themes';
 
 const cardGLB = '/card.glb';
 const lanyard = '/lanyard.png';
@@ -12,6 +13,31 @@ const lanyard = '/lanyard.png';
 import * as THREE from 'three';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    meshLineGeometry: any;
+    meshLineMaterial: any;
+  }
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      meshLineGeometry: any;
+      meshLineMaterial: any;
+    }
+  }
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        meshLineGeometry: any;
+        meshLineMaterial: any;
+      }
+    }
+  }
+}
+
 
 // 1x1 transparent pixel — lets useTexture be called unconditionally when a
 // front/back image isn't supplied.
@@ -110,6 +136,17 @@ export function Lanyard({
   );
 }
 
+interface BandProps {
+  maxSpeed?: number;
+  minSpeed?: number;
+  isMobile?: boolean;
+  frontImage?: string | null;
+  backImage?: string | null;
+  imageFit?: 'cover' | 'contain';
+  lanyardImage?: string | null;
+  lanyardWidth?: number;
+}
+
 function Band({
   maxSpeed = 50,
   minSpeed = 0,
@@ -119,43 +156,110 @@ function Band({
   imageFit = 'cover',
   lanyardImage = null,
   lanyardWidth = 1
-}) {
-  const band = useRef(),
-    fixed = useRef(),
-    j1 = useRef(),
-    j2 = useRef(),
-    j3 = useRef(),
-    card = useRef();
+}: BandProps) {
+  const band = useRef<any>(null),
+    fixed = useRef<any>(null),
+    j1 = useRef<any>(null),
+    j2 = useRef<any>(null),
+    j3 = useRef<any>(null),
+    card = useRef<any>(null);
   const vec = new THREE.Vector3(),
     ang = new THREE.Vector3(),
     rot = new THREE.Vector3(),
     dir = new THREE.Vector3();
-  const segmentProps = { type: 'dynamic', canSleep: true, colliders: false, angularDamping: 4, linearDamping: 4 };
-  const { nodes, materials } = useGLTF(cardGLB);
-  const texture = useTexture(lanyardImage || lanyard);
+  const segmentProps: any = { type: 'dynamic', canSleep: true, colliders: false, angularDamping: 4, linearDamping: 4 };
+  const { nodes, materials } = useGLTF(cardGLB) as any;
+  const rawLanyardTexture = useTexture(lanyardImage || lanyard);
   // useTexture must be called unconditionally; use a blank pixel when an image
   // isn't supplied for a given face, then skip compositing it below.
   const frontTex = useTexture(frontImage || BLANK_PIXEL);
   const backTex = useTexture(backImage || BLANK_PIXEL);
 
+  // Cord texture inverts with the site theme: white cord on dark mode,
+  // dark cord on light mode — so it stays visible against either background.
+  const { resolvedTheme } = useTheme();
+  const cordColor = '#ffffff';
+
+  const lanyardMap = useMemo(() => {
+    if (!rawLanyardTexture || !rawLanyardTexture.image) return rawLanyardTexture;
+    if (typeof document === 'undefined') return rawLanyardTexture;
+
+    if (resolvedTheme !== 'dark') {
+      rawLanyardTexture.wrapS = rawLanyardTexture.wrapT = THREE.RepeatWrapping;
+      rawLanyardTexture.needsUpdate = true;
+      return rawLanyardTexture;
+    }
+
+    const img = (rawLanyardTexture as any).image;
+    const W = img.width;
+    const H = img.height;
+    if (!W || !H) return rawLanyardTexture;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return rawLanyardTexture;
+    ctx.drawImage(img as any, 0, 0, W, H);
+
+    const imgData = ctx.getImageData(0, 0, W, H);
+    const data = imgData.data;
+    let maxVal = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      const inv = 255 - data[i];
+      if (inv > maxVal) maxVal = inv;
+    }
+    const threshold = maxVal - 1;
+    for (let i = 0; i < data.length; i += 4) {
+      for (let c = 0; c < 3; c++) {
+        const val = 255 - data[i + c];
+        data[i + c] = val < threshold ? 0 : 255;
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.colorSpace = rawLanyardTexture.colorSpace || THREE.SRGBColorSpace;
+    tex.anisotropy = 16;
+    tex.needsUpdate = true;
+    return tex;
+  }, [rawLanyardTexture, resolvedTheme, 'v3']);
+
   // Composite the front/back images into the card's texture atlas (front = left
   // half, back = right half). Each image is drawn aspect-preserving (no stretch).
   const cardMap = useMemo(() => {
     const baseMap = materials.base.map;
-    if (!frontImage && !backImage) return baseMap;
+    const isLight = resolvedTheme !== 'dark';
+    if (!frontImage && !backImage && !isLight) return baseMap;
+    if (typeof document === 'undefined') return baseMap;
 
-    const baseImg = baseMap.image;
+    const baseImg = (baseMap as any).image;
+    if (!baseImg) return baseMap;
     const W = baseImg.width;
     const H = baseImg.height;
+    if (!W || !H) return baseMap;
+
     const canvas = document.createElement('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d');
     if (!ctx) return baseMap;
     // Keep the original baked atlas for the card edges and any untouched face.
-    ctx.drawImage(baseImg, 0, 0, W, H);
+    ctx.drawImage(baseImg as any, 0, 0, W, H);
 
-    const drawFitted = (img, rect) => {
+    if (isLight) {
+      const imgData = ctx.getImageData(0, 0, W, H);
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        data[i] = 255 - data[i];
+        data[i + 1] = 255 - data[i + 1];
+        data[i + 2] = 255 - data[i + 2];
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+
+    const drawFitted = (img: any, rect: any) => {
       const rx = rect.x * W;
       const ry = rect.y * H;
       const rw = rect.w * W;
@@ -183,12 +287,12 @@ function Band({
     composite.anisotropy = 16;
     composite.needsUpdate = true;
     return composite;
-  }, [frontImage, backImage, imageFit, frontTex, backTex, materials.base.map]);
+  }, [frontImage, backImage, imageFit, frontTex, backTex, materials.base.map, resolvedTheme]);
   const [curve] = useState(
     () =>
       new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
   );
-  const [dragged, drag] = useState(false);
+  const [dragged, drag] = useState<any>(false);
   const [hovered, hover] = useState(false);
   const bandReady = useRef(false);
 
@@ -243,7 +347,7 @@ function Band({
   });
 
   curve.curveType = 'chordal';
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  lanyardMap.wrapS = lanyardMap.wrapT = THREE.RepeatWrapping;
 
   return (
     <>
@@ -265,9 +369,9 @@ function Band({
             position={[0, -1.2, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
-            onPointerUp={e => (e.target.releasePointerCapture(e.pointerId), drag(false))}
+            onPointerUp={e => ((e.target as any).releasePointerCapture(e.pointerId), drag(false))}
             onPointerDown={e => (
-              e.target.setPointerCapture(e.pointerId),
+              (e.target as any).setPointerCapture(e.pointerId),
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
             )}
           >
@@ -289,11 +393,11 @@ function Band({
       <mesh ref={band} visible={false}>
         <meshLineGeometry />
         <meshLineMaterial
-          color="white"
+          color={cordColor}
           depthTest={false}
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap
-          map={texture}
+          map={lanyardMap}
           repeat={[-4, 1]}
           lineWidth={lanyardWidth}
         />

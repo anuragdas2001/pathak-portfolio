@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import { PORTFOLIO_DATA } from "@/data/portfolioData";
 import { Spotlight } from "@/components/ui/spotlight";
 import { FlipWords } from "@/components/ui/flip-words";
-import  Lanyard from "@/components/ui/react-bits/Lanyard";
+import Lanyard from "@/components/ui/react-bits/Lanyard";
 import { DotField } from "@/components/ui/react-bits/DotField";
 import { BlurText } from "@/components/ui/react-bits/BlurText";
 import { ShinyText } from "@/components/ui/react-bits/ShinyText";
@@ -105,14 +105,14 @@ export function Hero() {
 
         {/* Right column: Interactive 3D Lanyard ID Card from React Bits */}
         <div className="lg:col-span-5 h-[480px] sm:h-[550px] lg:h-[620px] w-full relative flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/5 via-zinc-500/5 to-transparent dark:from-white/5 dark:via-zinc-400/5 dark:to-transparent rounded-full blur-3xl -z-10" />
-          
+          <div className="absolute inset-0  dark:from-white/5 dark:via-zinc-400/5 dark:to-transparent rounded-full blur-3xl -z-10" />
+
           <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} />
 
-          <div className="absolute bottom-4 right-4 pointer-events-none hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-black/80 border border-black/15 dark:border-white/15 backdrop-blur-md text-[10px] font-mono text-zinc-700 dark:text-zinc-300 shadow-lg">
+          {/* <div className="absolute bottom-4 right-4 pointer-events-none hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-black/80 border border-black/15 dark:border-white/15 backdrop-blur-md text-[10px] font-mono text-zinc-700 dark:text-zinc-300 shadow-lg">
             <Cpu className="h-3 w-3 text-black dark:text-white animate-spin" style={{ animationDuration: "8s" }} />
             <span>3D Physics Lanyard • Drag Badge</span>
-          </div>
+          </div> */}
         </div>
       </div>
 

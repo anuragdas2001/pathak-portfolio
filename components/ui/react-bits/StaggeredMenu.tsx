@@ -3,6 +3,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useTheme } from 'next-themes';
+import { Sun, Moon } from 'lucide-react';
 
 export interface StaggeredMenuProps {
   position?: 'left' | 'right';
@@ -50,31 +51,178 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   const panelRef = useRef<any>(null);
   const preLayersRef = useRef<any>(null);
   const preLayerElsRef = useRef<any>([]);
-  const plusHRef = useRef<any>(null);
-  const plusVRef = useRef<any>(null);
+  const lineTopRef = useRef<any>(null);
+  const lineMidRef = useRef<any>(null);
+  const lineBotRef = useRef<any>(null);
   const iconRef = useRef<any>(null);
-  const textInnerRef = useRef<any>(null);
-  const textWrapRef = useRef<any>(null);
-  const [textLines, setTextLines] = useState(['Menu', 'Close']);
 
   const openTlRef = useRef<any>(null);
   const closeTweenRef = useRef<any>(null);
   const spinTweenRef = useRef<any>(null);
-  const textCycleAnimRef = useRef<any>(null);
   const colorTweenRef = useRef<any>(null);
   const toggleBtnRef = useRef<any>(null);
   const busyRef = useRef<any>(false);
   const itemEntranceTweenRef = useRef<any>(null);
 
+  const toggleTheme = useCallback((e: React.MouseEvent) => {
+    const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
+
+    if (!document.startViewTransition) {
+      setTheme(nextTheme);
+      return;
+    }
+
+    // Style: NEW page on top, starts HIDDEN via clip-path (prevents flash before animation).
+    // OLD page behind, untouched — avoids grey blob from WebGL-less screenshots.
+    // Initialize CSS variable to a collapsed point at bottom-right BEFORE transition starts.
+    // This ensures the new theme page starts 100% hidden at frame zero.
+    document.documentElement.style.setProperty('--pt-clip', 'polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%)');
+
+    // Style: NEW page on top, starts HIDDEN via clip-path (prevents flash before animation).
+    // OLD page behind, untouched — avoids grey blob from WebGL-less screenshots.
+    const style = document.createElement('style');
+    style.id = 'page-turn-style';
+    style.innerHTML = `
+      ::view-transition-group(root) { animation: none !important; }
+      ::view-transition-old(root)  { animation: none !important; z-index: 1 !important; }
+      ::view-transition-new(root)  {
+        animation: none !important;
+        z-index: 2 !important;
+        clip-path: var(--pt-clip, polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%));
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Curl flap overlay: wrapper (drop-shadow filter) → paper (gradient + clip).
+    // Starts invisible (clipped to a point) — no flash.
+    const curlWrap = document.createElement('div');
+    curlWrap.style.cssText = 'position:fixed;inset:0;z-index:999999;pointer-events:none;filter:drop-shadow(-6px 6px 18px rgba(0,0,0,0.4))';
+    const curlPaper = document.createElement('div');
+    curlPaper.style.cssText = 'position:absolute;inset:0;clip-path:polygon(100% 100%,100% 100%,100% 100%)';
+    curlPaper.style.background = resolvedTheme === 'dark'
+      ? 'linear-gradient(135deg, #71717a 0%, #52525b 35%, #3f3f46 65%, #27272a 100%)'
+      : 'linear-gradient(135deg, #fafafa 0%, #e4e4e7 35%, #d4d4d8 65%, #a1a1aa 100%)';
+    curlWrap.appendChild(curlPaper);
+    document.body.appendChild(curlWrap);
+
+    const transition = document.startViewTransition(() => {
+      setTheme(nextTheme);
+    });
+
+    transition.ready.then(() => {
+      // ── SPEED CONTROL ──
+      // Both animations use this duration so the page reveal and paper curl stay in perfect sync.
+      const SPEED_SECONDS = 3.2;
+
+      // ── Keep the view-transition snapshot alive for the full duration ──
+      // The CSS above sets `animation: none` on the transition pseudo-elements,
+      // so without a real Animation targeting them the browser tears the
+      // snapshot tree down almost immediately after setTheme() runs — the
+      // live DOM (already the new theme) then shows through everywhere
+      // instantly, while only the separate curlWrap overlay kept animating
+      // on its own schedule (the "theme already switched except under the
+      // flap" bug). This is a no-op animation (opacity stays 1) whose only
+      // job is to hold the transition open for SPEED_SECONDS so our
+      // --pt-clip updates below stay visible for the whole animation
+      // instead of being drawn on top of an already-fully-revealed page.
+      document.documentElement.animate(
+        { opacity: [1, 1] },
+        { duration: SPEED_SECONDS * 1000, pseudoElement: '::view-transition-new(root)', fill: 'forwards' }
+      );
+
+      // ── Single Unified GSAP Animation ──
+      // Controls BOTH the new theme page reveal AND the 3D curled paper flap so they share the exact
+      // same crease line A→B, eliminating the 'two layers' separation in Screenshot 2!
+      const animObj = { progress: 0 };
+      gsap.to(animObj, {
+        progress: 1,
+        duration: SPEED_SECONDS,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          const t = animObj.progress;
+          const W = window.innerWidth;
+          const H = window.innerHeight;
+
+          // Diagonal crease A→B sweeps from bottom-right to top-left
+          let Ax: number, Ay: number, Bx: number, By: number;
+          if (t <= 0.5) {
+            Ax = W * (1 - 2 * t);
+            Ay = H;
+            Bx = W;
+            By = H * (1 - 2 * t);
+          } else {
+            Ax = 0;
+            Ay = H * (2 - 2 * t);
+            Bx = W * (2 - 2 * t);
+            By = 0;
+          }
+
+          const dx = Bx - Ax;
+          const dy = By - Ay;
+          const creaseLen = Math.sqrt(dx * dx + dy * dy) || 1;
+
+          // Unit normal to the crease, pointing toward the BOTTOM-RIGHT
+          // (the side that's already revealed). The curl needs to bulge
+          // into the newly revealed page so it shows up as a contrasting
+          // shape against it — bulging over the still-covered old page
+          // made it blend into a same-toned background and disappear.
+          let nx = dy / creaseLen;
+          let ny = -dx / creaseLen;
+          if (nx + ny < 0) {
+            nx = -nx;
+            ny = -ny;
+          }
+
+          // How far the roll bulges out from the crease.
+          // Using Math.pow(..., 0.5) ensures the curl immediately has prominent width/height
+          // right from millisecond zero at the bottom-right corner (fixing Screenshot 1)!
+          const bulge = Math.min(W, H) * 0.25 * Math.pow(Math.sin(t * Math.PI), 0.5);
+
+          // ── 1. Page Reveal Path (the boundary of the newly revealed theme page) ──
+          // Exactly aligned with crease line A→B so there is zero gap or separation between layers!
+          let revealPath: string;
+          if (t <= 0.5) {
+            revealPath = `M ${Ax} ${Ay} L ${Bx} ${By} L ${W} ${H} L ${Ax} ${H} Z`;
+          } else {
+            revealPath = `M 0 ${Ay} L ${Bx} 0 L ${W} 0 L ${W} ${H} L 0 ${H} Z`;
+          }
+          document.documentElement.style.setProperty('--pt-clip', `path('${revealPath}')`);
+
+          // ── 2. Big Smooth Rounded Fold via Cubic Bezier (C) ──
+          // Attached along the exact same crease line A→B!
+          const C1x = Ax + dx * 0.25 + nx * (bulge * 1.35);
+          const C1y = Ay + dy * 0.25 + ny * (bulge * 1.35);
+          const C2x = Ax + dx * 0.75 + nx * (bulge * 1.35);
+          const C2y = Ay + dy * 0.75 + ny * (bulge * 1.35);
+
+          const curlPath = `M ${Ax} ${Ay} C ${C1x} ${C1y}, ${C2x} ${C2y}, ${Bx} ${By} L ${Bx} ${By} Z`;
+          curlPaper.style.clipPath = `path('${curlPath}')`;
+        },
+        onComplete: () => {
+          gsap.to(curlWrap, {
+            opacity: 0,
+            duration: 0.15,
+            onComplete: () => curlWrap.remove()
+          });
+        }
+      });
+    });
+
+    transition.finished.then(() => {
+      style.remove();
+      document.documentElement.style.removeProperty('--pt-clip');
+    });
+  }, [resolvedTheme, setTheme]);
+
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const panel = panelRef.current;
       const preContainer = preLayersRef.current;
-      const plusH = plusHRef.current;
-      const plusV = plusVRef.current;
+      const lineTop = lineTopRef.current;
+      const lineMid = lineMidRef.current;
+      const lineBot = lineBotRef.current;
       const icon = iconRef.current;
-      const textInner = textInnerRef.current;
-      if (!panel || !plusH || !plusV || !icon || !textInner) return;
+      if (!panel || !lineTop || !lineMid || !lineBot || !icon) return;
 
       let preLayers: any[] = [];
       if (preContainer) {
@@ -87,10 +235,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       if (preContainer) {
         gsap.set(preContainer, { xPercent: 0, opacity: 1 });
       }
-      gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 });
-      gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 });
+      gsap.set(lineTop, { y: -5, rotate: 0, opacity: 1 });
+      gsap.set(lineMid, { y: 0, opacity: 1, scaleX: 1 });
+      gsap.set(lineBot, { y: 5, rotate: 0, opacity: 1 });
       gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
-      gsap.set(textInner, { yPercent: 0 });
       if (toggleBtnRef.current) gsap.set(toggleBtnRef.current, { color: menuButtonColor });
     });
     return () => ctx.revert();
@@ -258,13 +406,19 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   }, [position]);
 
   const animateIcon = useCallback(opening => {
-    const icon = iconRef.current;
-    if (!icon) return;
+    const top = lineTopRef.current;
+    const mid = lineMidRef.current;
+    const bot = lineBotRef.current;
+    if (!top || !mid || !bot) return;
     spinTweenRef.current?.kill();
     if (opening) {
-      spinTweenRef.current = gsap.to(icon, { rotate: 225, duration: 0.8, ease: 'power4.out', overwrite: 'auto' });
+      gsap.to(top, { y: 0, rotate: 45, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+      gsap.to(mid, { opacity: 0, scaleX: 0, duration: 0.2, ease: 'power3.out', overwrite: 'auto' });
+      gsap.to(bot, { y: 0, rotate: -45, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
     } else {
-      spinTweenRef.current = gsap.to(icon, { rotate: 0, duration: 0.35, ease: 'power3.inOut', overwrite: 'auto' });
+      gsap.to(top, { y: -5, rotate: 0, duration: 0.35, ease: 'power3.inOut', overwrite: 'auto' });
+      gsap.to(mid, { opacity: 1, scaleX: 1, duration: 0.35, ease: 'power3.inOut', overwrite: 'auto' });
+      gsap.to(bot, { y: 5, rotate: 0, duration: 0.35, ease: 'power3.inOut', overwrite: 'auto' });
     }
   }, []);
 
@@ -299,34 +453,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     }
   }, [changeMenuColorOnOpen, menuButtonColor, openMenuButtonColor]);
 
-  const animateText = useCallback(opening => {
-    const inner = textInnerRef.current;
-    if (!inner) return;
-    textCycleAnimRef.current?.kill();
-
-    const currentLabel = opening ? 'Menu' : 'Close';
-    const targetLabel = opening ? 'Close' : 'Menu';
-    const cycles = 3;
-    const seq = [currentLabel];
-    let last = currentLabel;
-    for (let i = 0; i < cycles; i++) {
-      last = last === 'Menu' ? 'Close' : 'Menu';
-      seq.push(last);
-    }
-    if (last !== targetLabel) seq.push(targetLabel);
-    seq.push(targetLabel);
-    setTextLines(seq);
-
-    gsap.set(inner, { yPercent: 0 });
-    const lineCount = seq.length;
-    const finalShift = ((lineCount - 1) / lineCount) * 100;
-    textCycleAnimRef.current = gsap.to(inner, {
-      yPercent: -finalShift,
-      duration: 0.5 + lineCount * 0.07,
-      ease: 'power4.out'
-    });
-  }, []);
-
   const toggleMenu = useCallback(() => {
     const target = !openRef.current;
     openRef.current = target;
@@ -340,8 +466,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     }
     animateIcon(target);
     animateColor(target);
-    animateText(target);
-  }, [playOpen, playClose, animateIcon, animateColor, animateText, onMenuOpen, onMenuClose]);
+  }, [playOpen, playClose, animateIcon, animateColor, onMenuOpen, onMenuClose]);
 
   const closeMenu = useCallback(() => {
     if (openRef.current) {
@@ -351,9 +476,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       playClose();
       animateIcon(false);
       animateColor(false);
-      animateText(false);
     }
-  }, [playClose, animateIcon, animateColor, animateText, onMenuClose]);
+  }, [playClose, animateIcon, animateColor, onMenuClose]);
 
   React.useEffect(() => {
     if (!closeOnClickAway || !open) return;
@@ -407,38 +531,31 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             </a>
           )}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {mounted && (
             <button
-              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="px-3 py-1.5 rounded-full border border-black/20 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-xs font-mono tracking-wider uppercase text-black dark:text-white pointer-events-auto"
+              onClick={toggleTheme}
+              className="relative p-2.5 rounded-full border border-black/20 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10 transition-all text-black dark:text-white pointer-events-auto flex items-center justify-center h-9 w-9 overflow-hidden cursor-pointer"
               aria-label="Toggle theme"
               type="button"
             >
-              {resolvedTheme === 'dark' ? '☀ Light' : '☾ Dark'}
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all duration-300 dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all duration-300 dark:rotate-0 dark:scale-100" />
             </button>
           )}
           <button
             ref={toggleBtnRef}
-            className="sm-toggle relative inline-flex items-center gap-1.5 bg-transparent border-none cursor-pointer font-medium leading-none overflow-visible text-black dark:text-white focus-visible:outline-2 focus-visible:outline-white/70 focus-visible:outline-offset-4 focus-visible:rounded"
+            className="sm-toggle relative inline-flex items-center justify-center p-2.5 rounded-full border border-black/20 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10 transition-all bg-transparent cursor-pointer font-medium leading-none overflow-visible text-black dark:text-white focus-visible:outline-2 focus-visible:outline-white/70 focus-visible:outline-offset-4 focus-visible:rounded h-9 w-9 pointer-events-auto"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             aria-controls="staggered-menu-panel"
             onClick={toggleMenu}
             type="button"
           >
-            <span ref={textWrapRef} className="sm-toggle-textWrap relative inline-block h-[1em] overflow-hidden whitespace-nowrap" aria-hidden="true">
-              <span ref={textInnerRef} className="sm-toggle-textInner flex flex-col leading-none">
-                {textLines.map((l, i) => (
-                  <span className="sm-toggle-line block h-[1em] leading-none" key={i}>
-                    {l}
-                  </span>
-                ))}
-              </span>
-            </span>
-            <span ref={iconRef} className="sm-icon relative w-3.5 h-3.5 flex-none inline-flex items-center justify-center" aria-hidden="true">
-              <span ref={plusHRef} className="sm-icon-line absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2" />
-              <span ref={plusVRef} className="sm-icon-line sm-icon-line-v absolute left-1/2 top-1/2 w-full h-0.5 bg-current rounded-sm -translate-x-1/2 -translate-y-1/2 rotate-90" />
+            <span ref={iconRef} className="sm-icon relative w-4 h-4 flex-none inline-flex items-center justify-center" aria-hidden="true">
+              <span ref={lineTopRef} className="absolute left-0 top-1/2 w-4 h-0.5 bg-current rounded-sm -translate-y-1/2 transform-gpu" />
+              <span ref={lineMidRef} className="absolute left-0 top-1/2 w-4 h-0.5 bg-current rounded-sm -translate-y-1/2 transform-gpu" />
+              <span ref={lineBotRef} className="absolute left-0 top-1/2 w-4 h-0.5 bg-current rounded-sm -translate-y-1/2 transform-gpu" />
             </span>
           </button>
         </div>

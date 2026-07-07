@@ -594,8 +594,11 @@ export function CircularGallery({
   const containerRef = useRef(null);
   
   // Format items to ensure compatibility with { image, text } schema expected by React Bits OGL
+  // Route external URLs through Next.js image proxy to prevent WebGL CORS tainting
   const formattedItems = items?.map((item: any) => ({
-    image: item.image,
+    image: item.image?.startsWith("http")
+      ? `/_next/image?url=${encodeURIComponent(item.image)}&w=1080&q=75`
+      : item.image,
     text: item.text || item.title || "Credential",
   }));
 
