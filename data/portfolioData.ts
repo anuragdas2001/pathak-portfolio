@@ -291,122 +291,122 @@ export const PORTFOLIO_DATA = {
     {
       title: "01",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~Y9YDNVJALKGG/CERTIFICATE_LANDING_PAGE~Y9YDNVJALKGG.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~Y9YDNVJALKGG/CERTIFICATE_LANDING_PAGE~Y9YDNVJALKGG.jpeg"
+      image: "/api/certificates?pathname=01_coursera_Y9YDNVJALKGG.jpeg",
+      url: "/api/certificates?pathname=01_coursera_Y9YDNVJALKGG.jpeg"
     },
     {
       title: "02",
       issuer: "Coursera",
-      image: "https://anuragdas-portfolio.vercel.app/certificates/Coursera%20VHZR6DKZ6UZP_page-0001.jpg",
-      url: "https://anuragdas-portfolio.vercel.app/certificates/Coursera%20VHZR6DKZ6UZP_page-0001.jpg"
+      image: "/api/certificates?pathname=02_coursera_VHZR6DKZ6UZP.jpg",
+      url: "/api/certificates?pathname=02_coursera_VHZR6DKZ6UZP.jpg"
     },
     {
       title: "03",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~SB8GD6RAUJPK/CERTIFICATE_LANDING_PAGE~SB8GD6RAUJPK.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~SB8GD6RAUJPK/CERTIFICATE_LANDING_PAGE~SB8GD6RAUJPK.jpeg"
+      image: "/api/certificates?pathname=03_coursera_SB8GD6RAUJPK.jpeg",
+      url: "/api/certificates?pathname=03_coursera_SB8GD6RAUJPK.jpeg"
     },
     {
       title: "04",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~SF5TQZ6NWV34/CERTIFICATE_LANDING_PAGE~SF5TQZ6NWV34.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~SF5TQZ6NWV34/CERTIFICATE_LANDING_PAGE~SF5TQZ6NWV34.jpeg"
+      image: "/api/certificates?pathname=04_coursera_SF5TQZ6NWV34.jpeg",
+      url: "/api/certificates?pathname=04_coursera_SF5TQZ6NWV34.jpeg"
     },
     {
       title: "05",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~J4T8QDNU8VUQ/CERTIFICATE_LANDING_PAGE~J4T8QDNU8VUQ.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~J4T8QDNU8VUQ/CERTIFICATE_LANDING_PAGE~J4T8QDNU8VUQ.jpeg"
+      image: "/api/certificates?pathname=05_coursera_J4T8QDNU8VUQ.jpeg",
+      url: "/api/certificates?pathname=05_coursera_J4T8QDNU8VUQ.jpeg"
     },
     {
       title: "06",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~KJTUALC9HLAA/CERTIFICATE_LANDING_PAGE~KJTUALC9HLAA.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~KJTUALC9HLAA/CERTIFICATE_LANDING_PAGE~KJTUALC9HLAA.jpeg"
+      image: "/api/certificates?pathname=06_coursera_KJTUALC9HLAA.jpeg",
+      url: "/api/certificates?pathname=06_coursera_KJTUALC9HLAA.jpeg"
     },
     {
       title: "07",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~JGX6RC3AZX5L/CERTIFICATE_LANDING_PAGE~JGX6RC3AZX5L.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~JGX6RC3AZX5L/CERTIFICATE_LANDING_PAGE~JGX6RC3AZX5L.jpeg"
+      image: "/api/certificates?pathname=07_coursera_JGX6RC3AZX5L.jpeg",
+      url: "/api/certificates?pathname=07_coursera_JGX6RC3AZX5L.jpeg"
     },
     {
       title: "08",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~DHYYKCVHDHXW/CERTIFICATE_LANDING_PAGE~DHYYKCVHDHXW.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~DHYYKCVHDHXW/CERTIFICATE_LANDING_PAGE~DHYYKCVHDHXW.jpeg"
+      image: "/api/certificates?pathname=08_coursera_DHYYKCVHDHXW.jpeg",
+      url: "/api/certificates?pathname=08_coursera_DHYYKCVHDHXW.jpeg"
     },
     {
       title: "09",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~PJE9TAWQ94HX/CERTIFICATE_LANDING_PAGE~PJE9TAWQ94HX.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~PJE9TAWQ94HX/CERTIFICATE_LANDING_PAGE~PJE9TAWQ94HX.jpeg"
+      image: "/api/certificates?pathname=09_coursera_PJE9TAWQ94HX.jpeg",
+      url: "/api/certificates?pathname=09_coursera_PJE9TAWQ94HX.jpeg"
     },
     {
       title: "10",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~RGEJDZ3LNUYW/CERTIFICATE_LANDING_PAGE~RGEJDZ3LNUYW.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~RGEJDZ3LNUYW/CERTIFICATE_LANDING_PAGE~RGEJDZ3LNUYW.jpeg"
+      image: "/api/certificates?pathname=10_coursera_RGEJDZ3LNUYW.jpeg",
+      url: "/api/certificates?pathname=10_coursera_RGEJDZ3LNUYW.jpeg"
     },
     {
       title: "11",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~DE5EMMTH829A/CERTIFICATE_LANDING_PAGE~DE5EMMTH829A.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~DE5EMMTH829A/CERTIFICATE_LANDING_PAGE~DE5EMMTH829A.jpeg"
+      image: "/api/certificates?pathname=11_coursera_DE5EMMTH829A.jpeg",
+      url: "/api/certificates?pathname=11_coursera_DE5EMMTH829A.jpeg"
     },
     {
       title: "12",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~FBJAELDLRR4E/CERTIFICATE_LANDING_PAGE~FBJAELDLRR4E.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~FBJAELDLRR4E/CERTIFICATE_LANDING_PAGE~FBJAELDLRR4E.jpeg"
+      image: "/api/certificates?pathname=12_coursera_FBJAELDLRR4E.jpeg",
+      url: "/api/certificates?pathname=12_coursera_FBJAELDLRR4E.jpeg"
     },
     {
       title: "13",
       issuer: "Coursera",
-      image: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~6H3MVA5ZA9DR/CERTIFICATE_LANDING_PAGE~6H3MVA5ZA9DR.jpeg",
-      url: "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~6H3MVA5ZA9DR/CERTIFICATE_LANDING_PAGE~6H3MVA5ZA9DR.jpeg"
+      image: "/api/certificates?pathname=13_coursera_6H3MVA5ZA9DR.jpeg",
+      url: "/api/certificates?pathname=13_coursera_6H3MVA5ZA9DR.jpeg"
     },
     {
       title: "14",
       issuer: "Professional Certification",
-      image: "https://anuragdas-portfolio.vercel.app/certificates/Frontend_page-0001.jpg",
-      url: "https://anuragdas-portfolio.vercel.app/certificates/Frontend_page-0001.jpg"
+      image: "/api/certificates?pathname=14_Frontend_page-0001.jpg",
+      url: "/api/certificates?pathname=14_Frontend_page-0001.jpg"
     },
     {
       title: "15",
       issuer: "Professional Certification",
-      image: "https://anuragdas-portfolio.vercel.app/certificates/Backend_page-0001.jpg",
-      url: "https://anuragdas-portfolio.vercel.app/certificates/Backend_page-0001.jpg"
+      image: "/api/certificates?pathname=15_Backend_page-0001.jpg",
+      url: "/api/certificates?pathname=15_Backend_page-0001.jpg"
     },
     {
       title: "16",
       issuer: "Professional Certification",
-      image: "https://anuragdas-portfolio.vercel.app/certificates/certificate177307189ef448573c36cc9a17780c744db851b_page-0001.jpg",
-      url: "https://anuragdas-portfolio.vercel.app/certificates/certificate177307189ef448573c36cc9a17780c744db851b_page-0001.jpg"
+      image: "/api/certificates?pathname=16_certificate_177307189ef448573c36cc9a17780c744db851b.jpg",
+      url: "/api/certificates?pathname=16_certificate_177307189ef448573c36cc9a17780c744db851b.jpg"
     },
     {
       title: "17",
       issuer: "Professional Certification",
-      image: "https://anuragdas-portfolio.vercel.app/certificates/certificate1773072221c57f7625f24f4847367e55d9c9119_page-0001.jpg",
-      url: "https://anuragdas-portfolio.vercel.app/certificates/certificate1773072221c57f7625f24f4847367e55d9c9119_page-0001.jpg"
+      image: "/api/certificates?pathname=17_certificate_1773072221c57f7625f24f4847367e55d9c9119.jpg",
+      url: "/api/certificates?pathname=17_certificate_1773072221c57f7625f24f4847367e55d9c9119.jpg"
     },
     {
       title: "18",
       issuer: "Professional Certification",
-      image: "https://anuragdas-portfolio.vercel.app/certificates/certificate177307352b7ec1f2d066bc29385d38b3c54f7e4_page-0001.jpg",
-      url: "https://anuragdas-portfolio.vercel.app/certificates/certificate177307352b7ec1f2d066bc29385d38b3c54f7e4_page-0001.jpg"
+      image: "/api/certificates?pathname=18_certificate_177307352b7ec1f2d066bc29385d38b3c54f7e4.jpg",
+      url: "/api/certificates?pathname=18_certificate_177307352b7ec1f2d066bc29385d38b3c54f7e4.jpg"
     },
     {
       title: "19",
       issuer: "Professional Certification",
-      image: "https://anuragdas-portfolio.vercel.app/certificates/certificate28681851d8be6c7f7eb5277a8f4cdb3ae1e95b5_page-0001.jpg",
-      url: "https://anuragdas-portfolio.vercel.app/certificates/certificate28681851d8be6c7f7eb5277a8f4cdb3ae1e95b5_page-0001.jpg"
+      image: "/api/certificates?pathname=19_certificate_28681851d8be6c7f7eb5277a8f4cdb3ae1e95b5.jpg",
+      url: "/api/certificates?pathname=19_certificate_28681851d8be6c7f7eb5277a8f4cdb3ae1e95b5.jpg"
     },
     {
       title: "20",
       issuer: "Professional Certification",
-      image: "https://anuragdas-portfolio.vercel.app/certificates/FE-cert_page-0001.jpg",
-      url: "https://anuragdas-portfolio.vercel.app/certificates/FE-cert_page-0001.jpg"
+      image: "/api/certificates?pathname=20_FE-cert_page-0001.jpg",
+      url: "/api/certificates?pathname=20_FE-cert_page-0001.jpg"
     }
   ] as Certification[],
 
