@@ -1,27 +1,24 @@
-import { Hero } from "@/components/sections/Hero";
-import { AboutBento } from "@/components/sections/AboutBento";
-import { TechStack } from "@/components/sections/TechStack";
-import { Projects } from "@/components/sections/Projects";
-import { Experience } from "@/components/sections/Experience";
-import { Contact } from "@/components/sections/Contact";
-import { GlobalBackground } from "@/components/ui/GlobalBackground";
-import GlobeDemo from "@/components/globe-demo";
+import { getPortfolioData } from "@/data/portfolioService";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { AboutSection } from "@/components/sections/AboutSection";
+import { SkillsSection } from "@/components/sections/SkillsSection";
+import { ProjectsSection } from "@/components/sections/ProjectsSection";
+import { WriteupsSection } from "@/components/sections/WriteupsSection";
+import { ExperienceSection } from "@/components/sections/ExperienceSection";
+import { ContactSection } from "@/components/sections/ContactSection";
 
-export default function Home() {
+export default async function Home() {
+  const data = await getPortfolioData();
+
   return (
-    <div className="flex flex-col w-full min-h-screen overflow-x-hidden relative bg-white dark:bg-[#050505] text-black dark:text-white transition-colors duration-300">
-      {/* Global Fixed Interactive DotField Background covering the entire portfolio */}
-      <GlobalBackground />
-
-      <div className="relative z-10 flex flex-col w-full">
-        <Hero />
-        <AboutBento />
-        <TechStack />
-        <Projects />
-        <Experience />
-        <GlobeDemo />
-        <Contact />
-      </div>
+    <div className="flex flex-col w-full">
+      <HeroSection data={data} />
+      <AboutSection profile={data.profile} focusPillars={data.focusPillars} />
+      <SkillsSection skills={data.skills} />
+      <ProjectsSection projects={data.projects} />
+      <WriteupsSection writeups={data.writeups} />
+      <ExperienceSection experience={data.experience} credentials={data.credentials} />
+      <ContactSection profile={data.profile} socials={data.socials} />
     </div>
   );
 }

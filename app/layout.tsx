@@ -1,73 +1,95 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { LenisProvider } from "@/components/providers/LenisProvider";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { CustomCursor } from "@/components/ui/CustomCursor";
-import { StaggeredMenu } from "@/components/ui/react-bits/StaggeredMenu";
-import { Footer } from "@/components/ui/Footer";
-import { PORTFOLIO_DATA } from "@/data/portfolioData";
+import { getPortfolioData } from "@/data/portfolioService";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: `${PORTFOLIO_DATA.developer.name} — ${PORTFOLIO_DATA.developer.role}`,
-  description: PORTFOLIO_DATA.developer.tagline,
-  keywords: ["Developer Portfolio", "Full-Stack Engineer", "Three.js", "GSAP", "Next.js 16", "WebGL"],
+export const viewport: Viewport = {
+  themeColor: "#0a0e14",
+  colorScheme: "dark",
 };
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const { profile } = await getPortfolioData();
+  return {
+    title: `${profile.name} (${profile.handle}) — ${profile.role}`,
+    description: profile.tagline,
+    keywords: [
+      "Cybersecurity Portfolio",
+      "Application Security Engineer",
+      "DevSecOps",
+      "Threat Modeling",
+      "Detection Engineering",
+      "Security Tooling",
+    ],
+    openGraph: {
+      title: `${profile.name} — ${profile.role}`,
+      description: profile.tagline,
+      type: "website",
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const data = await getPortfolioData();
+
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
-      suppressHydrationWarning
+      className={`${inter.variable} ${jetbrainsMono.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white dark:bg-[#050505] text-zinc-900 dark:text-zinc-100 selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black overflow-x-hidden font-sans">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <LenisProvider>
-            <CustomCursor />
-            <StaggeredMenu
-              isFixed={true}
-              position="right"
-              items={[
-                { label: 'Home', ariaLabel: 'Go to home page', link: '#' },
-                { label: 'About', ariaLabel: 'Learn about us', link: '#about' },
-                { label: 'Skills', ariaLabel: 'View technical skills', link: '#skills' },
-                { label: 'Projects', ariaLabel: 'View our projects', link: '#projects' },
-                { label: 'Experience', ariaLabel: 'View work experience', link: '#experience' },
-                { label: 'Contact', ariaLabel: 'Get in touch', link: '#contact' }
-              ]}
-              socialItems={[
-                { label: 'GitHub', link: 'https://github.com' },
-                { label: 'LinkedIn', link: 'https://linkedin.com' },
-                { label: 'Twitter', link: 'https://twitter.com' },
-                { label: 'Discord', link: 'https://discord.com' }
-              ]}
-              displaySocials={true}
-              displayItemNumbering={true}
-              menuButtonColor="currentColor"
-              openMenuButtonColor="currentColor"
-              changeMenuColorOnOpen={true}
-              logoUrl={null}
-              accentColor="#888888"
-            />
-            <main className="flex-1 w-full">{children}</main>
-            <Footer />
-          </LenisProvider>
-        </ThemeProvider>
+      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text)] overflow-x-hidden font-sans relative">
+        {/* Decorative pure-CSS grid + scanlines layer */}
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 pointer-events-none z-0 overflow-hidden"
+        >
+          <div className="absolute inset-0 cyber-grid-bg opacity-80" />
+          <div className="absolute inset-0 cyber-vignette" />
+          <div className="absolute inset-0 cyber-scanlines" />
+        </div>
+
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-sm focus:bg-[var(--accent)] focus:text-[var(--accent-contrast)] focus:font-mono focus:text-xs focus:font-bold"
+        >
+          Skip to main content
+        </a>
+
+        <Navbar
+          handle={data.profile.handle}
+          name={data.profile.name}
+          email={data.profile.email}
+          pgpFingerprint={data.profile.pgpFingerprint}
+          navItems={data.navItems}
+          projects={data.projects}
+          socials={data.socials}
+        />
+
+        <main id="main-content" className="relative z-10 flex-1 w-full">
+          {children}
+        </main>
+
+        <Footer profile={data.profile} socials={data.socials} />
       </body>
     </html>
   );

@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
         "X-Content-Type-Options": "nosniff",
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error serving private blob:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }

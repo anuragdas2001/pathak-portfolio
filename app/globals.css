@@ -1,58 +1,287 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
+/* ==========================================================================
+   1. DESIGN TOKENS
+   ========================================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
-}
+  --bg: #0a0e14;
+  --bg-elevated: #0f1620;
+  --bg-panel: #0c121b;
+  --border: #1c2733;
+  --text: #c9d1d9;
+  --text-secondary: #95a4b8;
+  --text-muted: #6b7a90;
+  --accent: #00ff9c;
+  --accent-contrast: #0a0e14;
+  --accent-2: #00e5ff;
+  --danger: #ff2e63;
+  --warn: #ffb000;
 
-.dark {
-  --background: #050505;
-  --foreground: #ededed;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+
+  --glow-accent: 0 0 22px rgba(0, 255, 156, 0.14), inset 0 1px 0 rgba(0, 255, 156, 0.08);
+  --glow-accent-2: 0 0 22px rgba(0, 229, 255, 0.14);
+  --grid-line: rgba(0, 255, 156, 0.035);
+  --scanline-alpha: 0.035;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-border-cyber: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-danger: var(--danger);
+  --color-warn: var(--warn);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ==========================================================================
+   2. BASE STYLES
+   ========================================================================== */
+html {
+  background-color: var(--bg);
+  color: var(--text);
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar */
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Thin Cyber Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-::-webkit-scrollbar-thumb {
-  background: #71717a;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  width: 6px;
+  height: 6px;
 }
 
-/* Hide default cursor on desktop for GSAP CustomCursor */
-@media (min-width: 768px) {
-  body, a, button, input, textarea, select, [role="button"], .interactive {
-    cursor: none !important;
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ==========================================================================
+   3. LAYOUT & ATMOSPHERIC OVERLAYS
+   ========================================================================== */
+.cyber-grid-bg {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.cyber-dot-bg {
+  background-image: radial-gradient(rgba(0, 255, 156, 0.16) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.cyber-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0px,
+    rgba(255, 255, 255, 0) 2px,
+    rgba(0, 0, 0, var(--scanline-alpha)) 3px,
+    rgba(0, 0, 0, var(--scanline-alpha)) 4px
+  );
+}
+
+.cyber-vignette {
+  background: radial-gradient(
+    circle at 50% 15%,
+    transparent 0%,
+    rgba(10, 14, 20, 0.55) 75%,
+    var(--bg) 100%
+  );
+}
+
+/* ==========================================================================
+   4. COMPONENTS
+   ========================================================================== */
+.cyber-panel {
+  background-color: rgba(15, 22, 32, 0.92);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  position: relative;
+  transition: border-color 200ms ease-out, box-shadow 200ms ease-out, transform 200ms ease-out;
+}
+
+.cyber-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 156, 0.4),
+    rgba(0, 229, 255, 0.35),
+    transparent
+  );
+  opacity: 0.4;
+  pointer-events: none;
+  transition: opacity 200ms ease-out;
+}
+
+.cyber-panel:hover {
+  border-color: rgba(0, 255, 156, 0.45);
+  box-shadow: var(--glow-accent);
+}
+
+.cyber-panel:hover::before {
+  opacity: 0.95;
+}
+
+.cyber-btn-primary {
+  border: 1px solid var(--accent);
+  background-color: rgba(0, 255, 156, 0.1);
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+  transition:
+    background-color 180ms ease-out,
+    color 180ms ease-out,
+    box-shadow 180ms ease-out,
+    transform 150ms ease-out;
+}
+
+.cyber-btn-primary:hover,
+.cyber-btn-primary:focus-visible {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  box-shadow: var(--glow-accent);
+}
+
+.cyber-btn-secondary {
+  border: 1px solid var(--border);
+  background-color: var(--bg-elevated);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  transition:
+    border-color 180ms ease-out,
+    color 180ms ease-out,
+    background-color 180ms ease-out,
+    transform 150ms ease-out;
+}
+
+.cyber-btn-secondary:hover,
+.cyber-btn-secondary:focus-visible {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+  background-color: rgba(0, 229, 255, 0.08);
+}
+
+/* Hover-only subtle glitch effect (~280ms) */
+.cyber-glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.cyber-glitch:hover {
+  animation: cyber-glitch-anim 280ms steps(2, end) 1;
+}
+
+@keyframes cyber-glitch-anim {
+  0% {
+    text-shadow: 2px 0 var(--accent), -2px 0 var(--danger);
+    transform: translate(0, 0);
+  }
+  33% {
+    text-shadow: -2px 0 var(--accent-2), 2px 0 var(--accent);
+    transform: translate(-1px, 1px);
+  }
+  66% {
+    text-shadow: 2px 0 var(--danger), -2px 0 var(--accent-2);
+    transform: translate(1px, -1px);
+  }
+  100% {
+    text-shadow: none;
+    transform: translate(0, 0);
   }
 }
 
-/* Utility animations */
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
+/* ==========================================================================
+   5. UTILITIES & MOTION
+   ========================================================================== */
+@keyframes cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 4s ease-in-out infinite;
+.animate-cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+.reveal-section {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 280ms ease-out, transform 280ms ease-out;
+}
+
+.reveal-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   6. REDUCED MOTION OVERRIDES
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-cursor-blink {
+    animation: none !important;
+  }
+
+  .cyber-glitch:hover {
+    animation: none !important;
+    text-shadow: none !important;
+    transform: none !important;
+  }
+
+  .reveal-section {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
